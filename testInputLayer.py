@@ -39,8 +39,8 @@ for n in range(label.shape[0]):
     for i in range(49):
         score=np.sum(label[n,i*90+10:i*90+90])
         if score>0.8:
-            x=label[n,i*90]
-            y=label[n,i*90+1]
+            x=label[n,i*90]*img1.shape[1]
+            y=label[n,i*90+1]*img1.shape[0]
             w=label[n,i*90+2]
             h=label[n,i*90+3]
             lx=int(np.floor(x-w*img1.shape[1]/2))

@@ -159,8 +159,8 @@ class YoloDataLayer(caffe.Layer):
                         grid_idx=gridY*self.grid+gridX
                         
                         for ibox in range(self.nBox):
-                            data_pack[grid_idx*grid_stride+ibox*5+0]=(px+peX)/2
-                            data_pack[grid_idx*grid_stride+ibox*5+1]=(py+peY)/2
+                            data_pack[grid_idx*grid_stride+ibox*5+0]=((px+peX)/2)/self.width
+                            data_pack[grid_idx*grid_stride+ibox*5+1]=((py+peY)/2)/self.height
                             data_pack[grid_idx*grid_stride+ibox*5+2]=iW/self.width
                             data_pack[grid_idx*grid_stride+ibox*5+3]=iH/self.height
                         for idx in todo:
@@ -170,8 +170,8 @@ class YoloDataLayer(caffe.Layer):
                             iou=computeIOU(px,bbox[0],peX,bbox[0]+bbox[2],py,bbox[1],peY,bbox[1]+bbox[3])
                             if iou>0 and data_pack[grid_idx*grid_stride+ibox*5+4]<iou:
                                 for ibox in range(self.nBox):
-                                    data_pack[grid_idx*grid_stride+ibox*5+0]=bbox[0]+bbox[2]/2
-                                    data_pack[grid_idx*grid_stride+ibox*5+1]=bbox[1]+bbox[3]/2
+                                    data_pack[grid_idx*grid_stride+ibox*5+0]=(bbox[0]+bbox[2]/2)/self.width
+                                    data_pack[grid_idx*grid_stride+ibox*5+1]=(bbox[1]+bbox[3]/2)/self.height
                                     data_pack[grid_idx*grid_stride+ibox*5+2]=bbox[2]/self.width
                                     data_pack[grid_idx*grid_stride+ibox*5+3]=bbox[3]/self.height
                                     #data_pack[grid_idx*grid_stride+ibox*5+0]=bbox[0]
