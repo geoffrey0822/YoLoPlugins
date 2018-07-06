@@ -41,11 +41,15 @@ for n in range(label.shape[0]):
         if score>0.8:
             x=label[n,i*90]
             y=label[n,i*90+1]
-            ex=label[n,i*90+2]
-            ey=label[n,i*90+3]
+            w=label[n,i*90+2]
+            h=label[n,i*90+3]
+            lx=int(np.floor(x-w*img1.shape[1]/2))
+            ly=int(np.floor(y-h*img1.shape[0]/2))
+            rx=int(np.floor(x+w*img1.shape[1]/2))
+            ry=int(np.floor(y+h*img1.shape[0]/2))
             #print label[n,i*90:i*90+90],
             print score,
-            cv2.rectangle(img1,(x,y),(ex,ey),(0,255,0),3)
+            cv2.rectangle(img1,(lx,ly),(rx,ry),(0,255,0),3)
             hasObj=True
     print ''
         #print label[n,i*90:i*90+90]
