@@ -7,14 +7,15 @@ import random
 from numpy import dtype
 
 def computeIOU(x1,x2,x3,x4,y1,y2,y3,y4):
-    left=max([x1,x3])
-    right=min([x2,x4])
-    top=max([y1,y3])
-    bottom=min([y2,y4])
+    #computeIOU(px,bbox[0],peX,bbox[0]+bbox[2],py,bbox[1],peY,bbox[1]+bbox[3])
+    left=max([x1,x2])
+    right=min([x3,x4])
+    top=max([y1,y2])
+    bottom=min([y3,y4])
     overlappedArea=(right-left)*(bottom-top)
-    unionArea=(x2-x1)*(y2-y1)+(x4-x3)*(y4-y3)-overlappedArea
+    unionArea=((x3-x1)*(y3-y1)+(x4-x2)*(y4-y2))-overlappedArea
     iou=0
-    if unionArea>0:
+    if unionArea>0 and overlappedArea<=unionArea:
         iou=overlappedArea/unionArea
     return iou
 
@@ -93,6 +94,7 @@ class YoloDataLayer(caffe.Layer):
             raise Exception('Yolo Data Layer Only support version 1, 2 and 3')
         elif self.version==1:
             self.anchorSize=self.grid*self.grid*(5*self.nBox+self.total_class)
+            self.annotDB=leveldb.LevelDB(self.annotation_path)
         elif self.version==2:
             self.anchorSize=self.grid*self.grid*5*self.nBox*self.total_class
             raise Exception('Not implement for version 2 yet')
@@ -105,8 +107,6 @@ class YoloDataLayer(caffe.Layer):
     
     def forward(self,bottom,top):
         if self.version==1:
-            self.annotDB=leveldb.LevelDB(self.annotation_path)
-            
             iW=np.floor(self.width/self.grid)
             iH=np.floor(self.height/self.grid)
             data_len=self.grid*self.grid*((5*self.nBox)+self.total_class)

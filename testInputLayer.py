@@ -51,6 +51,8 @@ for n in range(label.shape[0]):
             print score,
             cv2.rectangle(img1,(lx,ly),(rx,ry),(0,255,0),3)
             hasObj=True
+            print label[n,i*90+4],
+            print label[n,i*90+9]
     print ''
         #print label[n,i*90:i*90+90]
     if not hasObj:
